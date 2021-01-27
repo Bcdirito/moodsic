@@ -10,9 +10,15 @@ const app = express()
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
-app.use(express.static(__dirname + '/public'))
-app.use(cors())
-app.use(cookieParser());
+app.use(express.static(__dirname + '../public'))
+    .use(cors())
+    .use(cookieParser())
+    .use(express.static(path.join(__dirname, '../build')));
+
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'index.html'));
+})
+
 app.options('*', cors()); 
 
 const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID
@@ -27,6 +33,7 @@ app.listen(port, () => {
 })
 
 app.get("/login", (req, res) => {
+    console.log("made it here")
     const stateStr = generateStringToken(16)
     const scopeStr = 'streaming user-read-email user-read-private';
 
@@ -66,7 +73,6 @@ app.get("/callback", (req, res) => {
         }
 
         request.post(authOptions, (error, response, body) => {
-            console.log("made it here")
             if (!error && response.statusCode === 200) {
                 const accessToken = body.access_token,
                 refreshToken = body.refresh_token
@@ -81,12 +87,12 @@ app.get("/callback", (req, res) => {
                     console.log(body)
                 })
     
-                res.redirect("/#" + queryString.stringify({
+                res.redirect("http://localhost:3000/" + queryString.stringify({
                     access_token: accessToken,
                     refresh_token: refreshToken
                 }))
             } else {
-                res.redirect("/#" + queryString.stringify({
+                res.redirect("http://localhost:3000/" + queryString.stringify({
                     error: "Invalid Token"
                 }))
             }
