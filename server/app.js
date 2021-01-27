@@ -33,7 +33,6 @@ app.listen(port, () => {
 })
 
 app.get("/login", (req, res) => {
-    console.log("made it here")
     const stateStr = generateStringToken(16)
     const scopeStr = 'streaming user-read-email user-read-private';
 
