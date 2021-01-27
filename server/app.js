@@ -1,12 +1,19 @@
 const express = require("express")
 const queryString = require('querystring')
 const request = require("request")
+const cookieParser = require("cookie-parser")
+const cors = require("cors")
 
 const port = process.env.PORT || 8000
 const app = express()
 
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
+
+app.use(express.static(__dirname + '/public'))
+app.use(cors())
+app.use(cookieParser());
+app.options('*', cors()); 
 
 const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID
 const clientSecret = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET
@@ -21,19 +28,19 @@ app.listen(port, () => {
 
 app.get("/login", (req, res) => {
     const stateStr = generateStringToken(16)
-    const scopeStr = 'user-read-private user-read-email';
+    const scopeStr = 'streaming user-read-email user-read-private';
 
     res.cookie(stateKey, stateStr)
-
-    const query = queryString.stringify({
-        response_type: "code",
-        client_id: clientId,
-        scope: scopeStr,
-        redirect_uri: callbackUri,
-        state: stateStr
-    })
-
-    res.redirect(`https://accounts.spotify.com/authorize?${query}`)
+    
+    res.redirect("https://accounts.spotify.com/authorize?" + 
+        queryString.stringify({
+            response_type: "code",
+            client_id: clientId,
+            scope: scopeStr,
+            redirect_uri: callbackUri,
+            state: stateStr
+        })
+    )
 })
 
 app.get("/callback", (req, res) => {
@@ -49,7 +56,7 @@ app.get("/callback", (req, res) => {
             url: "https://accounts.spotify.com/api/token",
             form: {
                 code: code,
-                redirect_uri: redirect_uri,
+                redirect_uri: callbackUri,
                 grant_type: "authorization_code"
             },
             headers: {
@@ -57,31 +64,32 @@ app.get("/callback", (req, res) => {
             },
             json: true
         }
-    }
 
-    request.post(authOptions, (error, response, body) => {
-        if (!error && response.statusCode === 200) {
-            const accessToken = body.access_token,
-            refreshToken = body.refresh_token
-
-            const options = {
-                url: "https://api.spotify.com/v1/me",
-                headers: {"Authorization" : "Bearer " + accessToken},
-                json: true
+        request.post(authOptions, (error, response, body) => {
+            console.log("made it here")
+            if (!error && response.statusCode === 200) {
+                const accessToken = body.access_token,
+                refreshToken = body.refresh_token
+    
+                const options = {
+                    url: "https://api.spotify.com/v1/me",
+                    headers: {"Authorization" : "Bearer " + accessToken},
+                    json: true
+                }
+    
+                request.get(options, (error, response, body) => {
+                    console.log(body)
+                })
+    
+                res.redirect("/#" + queryString.stringify({
+                    access_token: accessToken,
+                    refresh_token: refreshToken
+                }))
+            } else {
+                res.redirect("/#" + queryString.stringify({
+                    error: "Invalid Token"
+                }))
             }
-
-            request.get(options, (error, response, body) => {
-                console.log(body)
-            })
-
-            res.redirect("/#" + queryString.stringify({
-                access_token: accessToken,
-                refresh_token: refreshToken
-            }))
-        } else {
-            res.redirect("/#" + queryString.stringify({
-                error: "Invalid Token"
-            }))
-        }
-    })
+        })
+    }
 })
