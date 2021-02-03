@@ -1,21 +1,10 @@
-import logo from './logo.svg';
-import './App.css';
+import Quiz from './components/quiz/Quiz.jsx';
+import './App.scss';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="/"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <Quiz />
     </div>
   );
 }
