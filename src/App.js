@@ -1,7 +1,12 @@
-import './App.scss'
+import Quiz from './components/quiz/Quiz.jsx';
+import './App.scss';
 
 function App() {
-  return <div className='App'>Hello world!</div>
+  return (
+    <div className='App'>
+      <Quiz />
+    </div>
+  );
 }
 
-export default App
+export default App;
