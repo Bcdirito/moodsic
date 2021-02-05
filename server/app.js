@@ -27,6 +27,7 @@ const callbackUri = process.env.REACT_APP_SPOTIFY_CALLBACK_URL
 
 const stateKey = "spotify_auth_state"
 const generateStringToken = require("./utils/generateStringToken")
+const { response } = require("express")
 
 app.listen(port, () => {
     console.log(`LISTENING ON PORT ${port}`)
@@ -98,3 +99,32 @@ app.get("/callback", (req, res) => {
         })
     }
 })
+
+app.get("/refresh-token", (req, res) => {
+    const refreshToken = req.query.refresh_token
+    const authOptions = {
+        url: "https://accounts.spotify.com/api/token",
+        headers: {
+            "Authorization": "Basic" + (new Buffer(`${clientId}:${clientSecret}`).toString('base64'))
+        },
+        form: {
+            "grant_type": "refresh_token",
+            "refresh_token": refreshToken
+        },
+
+        json: true
+    }
+
+    request.post(authOptions, (error, response, body) => {
+        if (!error && response.statusCode === 200) {
+            const accessToken = body.accessToken
+            res.send({
+                "accessToken": accessToken
+            })
+        } else {
+            console.log(`Error: ${error}`)
+        }
+    })
+})
+
+app.get("/")
