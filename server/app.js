@@ -126,3 +126,5 @@ app.get("/refresh-token", (req, res) => {
         }
     })
 })
+
+app.get("/")
