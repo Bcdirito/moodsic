@@ -30,12 +30,9 @@ const QuestionStyle = styled.div`
   }
 
   button {
-    width: 100%;
     border-radius: 36px;
     font-size: 1rem;
     font-weight: 600;
-    color: inherit;
-    border: 2px solid;
     box-shadow: 0px 8px 8px 0px #dcdba8;
   }
 
@@ -59,7 +56,7 @@ const QuestionStyle = styled.div`
     }
 
     button {
-      width: 196px;
+      min-width: 196px;
       font-size: 1.5rem;
     }
   }
@@ -70,7 +67,7 @@ const QuestionStyle = styled.div`
     }
 
     button {
-      width: 288px;
+      min-width: 288px;
     }
   }
 `;
