@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import questions from '../../db/questions.js';
-import QuestionStyle from './QuizStyle';
+import { QuestionStyle, ImageStyle } from './QuizStyle';
+import inkblot from '../../global/images/inkblot.jpg';
 
 const Quiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState({
     id: 0,
     title: null,
+    images: [],
     choices: {}
   });
   const [choices, setChoices] = useState({
@@ -55,12 +57,40 @@ const Quiz = () => {
     }
   };
 
+  const renderImage = () => {
+    const images = currentQuestion.images;
+
+    if (images.length === 1) {
+      return (
+        <ImageStyle>
+          <img src={inkblot} alt={images[0]} />
+        </ImageStyle>
+      );
+    }
+  };
+
+  const renderPairImage = id => {
+    const images = currentQuestion.images;
+
+    if (images.length > 1) {
+      const pairImage = require(`../../global/images/${currentQuestion.images[id]}`);
+
+      return (
+        <ImageStyle>
+          <img src={pairImage.default} alt={images[id]} />
+        </ImageStyle>
+      );
+    }
+  };
+
   return (
     <QuestionStyle>
       <h3>{currentQuestion.title}</h3>
+      {renderImage()}
       <ul onClick={updateQuizView}>
         {Object.keys(currentQuestion.choices).map((choice, idx) => (
           <li key={`choice-${idx}`}>
+            {renderPairImage(idx)}
             <button
               type='button'
               className='choice'

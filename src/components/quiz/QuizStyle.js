@@ -1,11 +1,10 @@
 import styled from 'styled-components';
-import blob from '../../global/svg/blob-primary.svg';
 
-// background-image: url(${blob});
-
-const QuestionStyle = styled.div`
+export const QuestionStyle = styled.div`
   max-width: 768px;
   padding: 1rem;
+  margin-top: auto;
+  margin-bottom: auto;
 
   background-repeat: no-repeat;
   background-size: cover;
@@ -72,4 +71,11 @@ const QuestionStyle = styled.div`
   }
 `;
 
-export default QuestionStyle;
+export const ImageStyle = styled.div`
+  margin-top: 2rem;
+
+  img {
+    max-width: 75%;
+    margin: 0 auto;
+  }
+`;

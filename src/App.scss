@@ -44,6 +44,11 @@ ul {
   padding-left: 0;
 }
 
+img {
+  width: 100%;
+  display: block;
+}
+
 button {
   width: 100%;
   background: $beige;
@@ -77,9 +82,9 @@ button {
 .App {
   display: flex;
   justify-content: center;
-  align-items: center;
   padding: 1rem;
   background-color: $beige;
+  overflow-y: scroll;
 
   @media (min-width: 768px) {
     padding: 2rem;
