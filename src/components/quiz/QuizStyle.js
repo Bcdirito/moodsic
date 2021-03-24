@@ -1,11 +1,10 @@
 import styled from 'styled-components';
-import blob from '../../global/svg/blob-primary.svg';
 
-// background-image: url(${blob});
-
-const QuestionStyle = styled.div`
+export const QuestionStyle = styled.div`
   max-width: 768px;
   padding: 1rem;
+  margin-top: auto;
+  margin-bottom: auto;
 
   background-repeat: no-repeat;
   background-size: cover;
@@ -30,20 +29,34 @@ const QuestionStyle = styled.div`
   }
 
   button {
-    width: 100%;
     border-radius: 36px;
     font-size: 1rem;
     font-weight: 600;
-    color: inherit;
-    border: 2px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     box-shadow: 0px 8px 8px 0px #dcdba8;
   }
 
+  span {
+    margin-left: 1rem;
+    pointer-events: none;
+  }
+
+  #question-3 {
+    flex-wrap: nowrap;
+    flex-direction: column;
+
+    button {
+      padding-bottom: 0;
+    }
+  }
+
   @media (min-width: 768px) {
-    padding: 2rem;
+    padding: 4rem 2rem;
 
     h3 {
-      font-size: 2.5rem;
+      font-size: 3rem;
     }
 
     ul {
@@ -59,7 +72,7 @@ const QuestionStyle = styled.div`
     }
 
     button {
-      width: 196px;
+      min-width: 196px;
       font-size: 1.5rem;
     }
   }
@@ -70,9 +83,28 @@ const QuestionStyle = styled.div`
     }
 
     button {
-      width: 288px;
+      min-width: 288px;
     }
   }
 `;
 
-export default QuestionStyle;
+export const ImageStyle = styled.div`
+  margin-top: 2rem;
+
+  img {
+    max-width: 75%;
+    margin: 0 auto;
+    border: 2.5px solid;
+  }
+`;
+
+export const ImagePairStyle = styled.img`
+  max-width: 50%;
+  max-height: 100px;
+  object-fit: cover;
+  object-position: top;
+
+  &:first-child {
+    width: 150px;
+  }
+`;
