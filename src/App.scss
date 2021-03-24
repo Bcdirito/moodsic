@@ -52,10 +52,11 @@ img {
 button {
   width: 100%;
   background: $beige;
-  border: 2.5px solid $primary;
+  border: 2.75px solid $primary;
   padding: 1rem;
   position: relative;
   color: inherit;
+  outline: none;
 
   &:hover {
     cursor: pointer;
@@ -73,7 +74,7 @@ button {
         )
         border-box;
     background-size: 300% 300%;
-    border: 3px solid transparent;
+    border: 2.75px solid transparent;
     border-radius: inherit;
     animation: moveGradient 4s alternate infinite;
   }

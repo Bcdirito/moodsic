@@ -32,14 +32,31 @@ export const QuestionStyle = styled.div`
     border-radius: 36px;
     font-size: 1rem;
     font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     box-shadow: 0px 8px 8px 0px #dcdba8;
   }
 
+  span {
+    margin-left: 1rem;
+    pointer-events: none;
+  }
+
+  #question-3 {
+    flex-wrap: nowrap;
+    flex-direction: column;
+
+    button {
+      padding-bottom: 0;
+    }
+  }
+
   @media (min-width: 768px) {
-    padding: 2rem;
+    padding: 4rem 2rem;
 
     h3 {
-      font-size: 2.5rem;
+      font-size: 3rem;
     }
 
     ul {
@@ -77,5 +94,17 @@ export const ImageStyle = styled.div`
   img {
     max-width: 75%;
     margin: 0 auto;
+    border: 2.5px solid;
+  }
+`;
+
+export const ImagePairStyle = styled.img`
+  max-width: 50%;
+  max-height: 100px;
+  object-fit: cover;
+  object-position: top;
+
+  &:first-child {
+    width: 150px;
   }
 `;

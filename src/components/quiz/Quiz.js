@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import questions from '../../db/questions.js';
-import { QuestionStyle, ImageStyle } from './QuizStyle';
+import { QuestionStyle, ImageStyle, ImagePairStyle } from './QuizStyle';
 import inkblot from '../../global/images/inkblot.jpg';
 
 const Quiz = () => {
@@ -75,11 +75,7 @@ const Quiz = () => {
     if (images.length > 1) {
       const pairImage = require(`../../global/images/${currentQuestion.images[id]}`);
 
-      return (
-        <ImageStyle>
-          <img src={pairImage.default} alt={images[id]} />
-        </ImageStyle>
-      );
+      return <ImagePairStyle src={pairImage.default} alt={images[id]} />;
     }
   };
 
@@ -87,10 +83,9 @@ const Quiz = () => {
     <QuestionStyle>
       <h3>{currentQuestion.title}</h3>
       {renderImage()}
-      <ul onClick={updateQuizView}>
+      <ul id={`question-${currentQuestion.id}`} onClick={updateQuizView}>
         {Object.keys(currentQuestion.choices).map((choice, idx) => (
           <li key={`choice-${idx}`}>
-            {renderPairImage(idx)}
             <button
               type='button'
               className='choice'
@@ -100,7 +95,8 @@ const Quiz = () => {
                   : null
               }
             >
-              {choice}
+              {renderPairImage(idx)}
+              <span>{choice}</span>
             </button>
           </li>
         ))}

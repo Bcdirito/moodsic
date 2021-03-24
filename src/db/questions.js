@@ -42,7 +42,7 @@ const questions = [
   },
   {
     id: 3,
-    title: 'White type of cat are you?',
+    title: 'Which type of cat are you?',
     images: [
       'sandCat.png',
       'bombayCat.png',
@@ -64,7 +64,7 @@ const questions = [
   },
   {
     id: 4,
-    title: "Quick you've become a flavor - pick one!",
+    title: "Quick, you've become a flavor—pick one!",
     images: [],
     choices: {
       Sweet: 'sunshineAndLollipops',
@@ -76,6 +76,6 @@ const questions = [
       Bitter: 'apocalypseMeow'
     }
   }
-]
+];
 
-module.exports = questions
+module.exports = questions;
