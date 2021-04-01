@@ -19,11 +19,11 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'index.html'));
 })
 
-app.options('*', cors()); 
+app.options('*', cors());
 
-const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID
-const clientSecret = process.env.REACT_APP_SPOTIFY_CLIENT_SECRET
-const callbackUri = process.env.REACT_APP_SPOTIFY_CALLBACK_URL
+const clientId = process.env.SPOTIFY_CLIENT_ID
+const clientSecret = process.env.SPOTIFY_CLIENT_SECRET
+const callbackUri = process.env.SPOTIFY_CALLBACK_URL
 
 const stateKey = "spotify_auth_state"
 const generateStringToken = require("./utils/generateStringToken")
@@ -38,8 +38,8 @@ app.get("/login", (req, res) => {
     const scopeStr = 'streaming user-read-email user-read-private';
 
     res.cookie(stateKey, stateStr)
-    
-    res.redirect("https://accounts.spotify.com/authorize?" + 
+
+    res.redirect("https://accounts.spotify.com/authorize?" +
         queryString.stringify({
             response_type: "code",
             client_id: clientId,
@@ -76,17 +76,17 @@ app.get("/callback", (req, res) => {
             if (!error && response.statusCode === 200) {
                 const accessToken = body.access_token,
                 refreshToken = body.refresh_token
-    
+
                 const options = {
                     url: "https://api.spotify.com/v1/me",
                     headers: {"Authorization" : "Bearer " + accessToken},
                     json: true
                 }
-    
+
                 request.get(options, (error, response, body) => {
                     console.log(body)
                 })
-    
+
                 res.redirect("http://localhost:3000/" + queryString.stringify({
                     access_token: accessToken,
                     refresh_token: refreshToken

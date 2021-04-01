@@ -28,6 +28,7 @@ h6 {
   line-height: 1.5;
   font-family: 'Branic', serif;
   font-weight: 900;
+  color: $primary;
 }
 
 p,
@@ -51,43 +52,53 @@ img {
 
 button {
   width: 100%;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: $beige;
   border: 2.75px solid $primary;
+  border-radius: 36px;
+  box-shadow: 0px 8px 8px 0px $tertiary;
   padding: 1rem;
   position: relative;
-  color: inherit;
+  color: $primary;
   outline: none;
 
   &:hover {
     cursor: pointer;
     transform: scale(1.05);
-    background: linear-gradient($beige, $beige) padding-box,
-      linear-gradient(
-          to right,
-          #fc4778ff,
-          #dc498dff,
-          #bb4ba2ff,
-          #9b4db7ff,
-          #7a4ecbff,
-          #5a50e0ff,
-          #3952f5ff
-        )
-        border-box;
-    background-size: 300% 300%;
-    border: 2.75px solid transparent;
-    border-radius: inherit;
-    animation: moveGradient 4s alternate infinite;
+    @include addGradient;
   }
+}
+
+section {
+  max-width: 768px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .App {
   display: flex;
   justify-content: center;
+  align-items: baseline;
   padding: 1rem;
   background-color: $beige;
   overflow-y: scroll;
+}
 
-  @media (min-width: 768px) {
+@media (min-width: 768px) {
+  .App {
     padding: 2rem;
+  }
+
+  button {
+    min-width: 288px;
+    font-size: 1.25rem;
   }
 }
