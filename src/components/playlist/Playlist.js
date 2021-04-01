@@ -24,6 +24,7 @@ const Playlist = ({ loggedIn, choices }) => {
     const allChoices = Object.keys(choices);
     let maxKey;
     let max = 0;
+    let choice;
 
     for (const key in choices) {
       if (choices[key] > max) {
@@ -35,12 +36,21 @@ const Playlist = ({ loggedIn, choices }) => {
     // If there is a tie, return random playlist
     // Otherwise, return suggested playlist
     if (max === 1) {
-      setPlaylistID(playlistData[allChoices[getRandomInt()]]['id']);
+      choice = allChoices[getRandomInt()];
+
+      if (playlistData[choice]) {
+        setPlaylistID(playlistData[choice]['id']);
+      }
     } else {
-      setPlaylistID(playlistData[maxKey]['id']);
+      if (sessionStorage.getItem('maxKey')) {
+        setPlaylistID(playlistData[sessionStorage.getItem('maxKey')]['id']);
+      }
     }
 
-    setPlaylistKey(maxKey);
+    if (maxKey) {
+      sessionStorage.setItem('maxKey', maxKey);
+      setPlaylistKey(maxKey || sessionStorage.getItem('maxKey'));
+    }
   };
 
   let renderPlaylist = (
