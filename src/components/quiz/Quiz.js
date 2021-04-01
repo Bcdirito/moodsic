@@ -64,6 +64,11 @@ const Quiz = ({ loggedIn, completedQuiz, setCompletedQuiz }) => {
     }
   };
 
+  const retakeQuiz = () => {
+    // Reset state
+    setCompletedQuiz(false);
+  };
+
   const renderHeader = () => {
     let headerTitle = 'We suggest';
 
@@ -101,7 +106,9 @@ const Quiz = ({ loggedIn, completedQuiz, setCompletedQuiz }) => {
   };
 
   const renderPlaylist = () => {
-    return <Playlist loggedIn={loggedIn} choices={choices} />;
+    return (
+      <Playlist loggedIn={loggedIn} choices={choices} retakeQuiz={retakeQuiz} />
+    );
   };
 
   return (

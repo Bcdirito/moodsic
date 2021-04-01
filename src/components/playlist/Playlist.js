@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PlaylistStyle } from './PlaylistStyle.js';
 import playlistData from '../../db/playlistData.js';
 
-const Playlist = ({ loggedIn, choices }) => {
+const Playlist = ({ loggedIn, choices, retakeQuiz }) => {
   const [playlistID, setPlaylistID] = useState(null);
   const [playlistKey, setPlaylistKey] = useState(null);
 
@@ -54,15 +54,21 @@ const Playlist = ({ loggedIn, choices }) => {
   };
 
   let renderPlaylist = (
-    <iframe
-      src={`https://open.spotify.com/embed/playlist/${playlistID}`}
-      width='100%'
-      height='600'
-      frameBorder='0'
-      allowtransparency='true'
-      allow='encrypted-media'
-      title={playlistKey}
-    ></iframe>
+    <React.Fragment>
+      <iframe
+        src={`https://open.spotify.com/embed/playlist/${playlistID}`}
+        width='100%'
+        height='600'
+        frameBorder='0'
+        allowtransparency='true'
+        allow='encrypted-media'
+        title={playlistKey}
+      ></iframe>
+
+      <button type='button' onClick={retakeQuiz}>
+        Retake Quiz
+      </button>
+    </React.Fragment>
   );
   let renderLogin = (
     <button type='button' onClick={logIntoSpotify}>
