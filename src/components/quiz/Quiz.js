@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import questions from '../../db/questions.js';
-import { QuestionStyle, ImageStyle, ImagePairStyle } from './QuizStyle';
+import Header from '../global/Header.js';
+import Playlist from '../playlist/Playlist.js';
 import inkblot from '../../global/images/inkblot.jpg';
 
-const Quiz = () => {
+import { QuestionStyle, ImageStyle, ImagePairStyle } from './QuizStyle';
+
+const Quiz = ({ loggedIn }) => {
+  const [completedQuiz, setCompletedQuiz] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState({
     id: 0,
     title: null,
@@ -37,6 +41,10 @@ const Quiz = () => {
     let nextQuestion;
     let choice;
 
+    if (currentQuestion.id === finalQuestion) {
+      setCompletedQuiz(true);
+    }
+
     if (
       currentQuestion.id !== finalQuestion &&
       e.target.classList.contains('choice') &&
@@ -55,6 +63,20 @@ const Quiz = () => {
       const currentScore = choices[choice] + 1;
       setChoices({ ...choices, [choice]: currentScore });
     }
+  };
+
+  const renderHeader = () => {
+    let headerTitle = 'We suggest';
+
+    if (loggedIn && !completedQuiz) {
+      headerTitle = currentQuestion.title;
+    }
+
+    if (!loggedIn) {
+      headerTitle = 'Log into Spotify to view playlist suggestions!';
+    }
+
+    return <Header header={headerTitle} />;
   };
 
   const renderImage = () => {
@@ -79,29 +101,42 @@ const Quiz = () => {
     }
   };
 
+  const renderPlaylist = () => {
+    if (completedQuiz) {
+      return <Playlist loggedIn={loggedIn} choices={choices} />;
+    }
+  };
+
   return (
-    <QuestionStyle>
-      <h3>{currentQuestion.title}</h3>
-      {renderImage()}
-      <ul id={`question-${currentQuestion.id}`} onClick={updateQuizView}>
-        {Object.keys(currentQuestion.choices).map((choice, idx) => (
-          <li key={`choice-${idx}`}>
-            <button
-              type='button'
-              className='choice'
-              data-choice={
-                Object.keys(currentQuestion.choices).length > 0
-                  ? currentQuestion.choices[choice]
-                  : null
-              }
-            >
-              {renderPairImage(idx)}
-              <span>{choice}</span>
-            </button>
-          </li>
-        ))}
-      </ul>
-    </QuestionStyle>
+    <section>
+      {renderHeader()}
+
+      {completedQuiz ? (
+        renderPlaylist()
+      ) : (
+        <QuestionStyle>
+          {renderImage()}
+          <ul id={`question-${currentQuestion.id}`} onClick={updateQuizView}>
+            {Object.keys(currentQuestion.choices).map((choice, idx) => (
+              <li key={`choice-${idx}`}>
+                <button
+                  type='button'
+                  className='choice'
+                  data-choice={
+                    Object.keys(currentQuestion.choices).length > 0
+                      ? currentQuestion.choices[choice]
+                      : null
+                  }
+                >
+                  {renderPairImage(idx)}
+                  <span>{choice}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </QuestionStyle>
+      )}
+    </section>
   );
 };
 
