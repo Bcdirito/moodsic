@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PlaylistStyle } from './PlaylistStyle.js';
 import playlistData from '../../db/playlistData.js';
 
-const Playlist = ({ loggedIn, choices }) => {
+const Playlist = ({ loggedIn, choices, retakeQuiz }) => {
   const [playlistID, setPlaylistID] = useState(null);
   const [playlistKey, setPlaylistKey] = useState(null);
 
@@ -24,6 +24,7 @@ const Playlist = ({ loggedIn, choices }) => {
     const allChoices = Object.keys(choices);
     let maxKey;
     let max = 0;
+    let choice;
 
     for (const key in choices) {
       if (choices[key] > max) {
@@ -35,24 +36,39 @@ const Playlist = ({ loggedIn, choices }) => {
     // If there is a tie, return random playlist
     // Otherwise, return suggested playlist
     if (max === 1) {
-      setPlaylistID(playlistData[allChoices[getRandomInt()]]['id']);
+      choice = allChoices[getRandomInt()];
+
+      if (playlistData[choice]) {
+        setPlaylistID(playlistData[choice]['id']);
+      }
     } else {
-      setPlaylistID(playlistData[maxKey]['id']);
+      if (sessionStorage.getItem('maxKey')) {
+        setPlaylistID(playlistData[sessionStorage.getItem('maxKey')]['id']);
+      }
     }
 
-    setPlaylistKey(maxKey);
+    if (maxKey) {
+      sessionStorage.setItem('maxKey', maxKey);
+      setPlaylistKey(maxKey || sessionStorage.getItem('maxKey'));
+    }
   };
 
   let renderPlaylist = (
-    <iframe
-      src={`https://open.spotify.com/embed/playlist/${playlistID}`}
-      width='100%'
-      height='600'
-      frameBorder='0'
-      allowtransparency='true'
-      allow='encrypted-media'
-      title={playlistKey}
-    ></iframe>
+    <React.Fragment>
+      <iframe
+        src={`https://open.spotify.com/embed/playlist/${playlistID}`}
+        width='100%'
+        height='600'
+        frameBorder='0'
+        allowtransparency='true'
+        allow='encrypted-media'
+        title={playlistKey}
+      ></iframe>
+
+      <button type='button' onClick={retakeQuiz}>
+        Retake Quiz
+      </button>
+    </React.Fragment>
   );
   let renderLogin = (
     <button type='button' onClick={logIntoSpotify}>

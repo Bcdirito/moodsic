@@ -6,8 +6,7 @@ import inkblot from '../../global/images/inkblot.jpg';
 
 import { QuestionStyle, ImageStyle, ImagePairStyle } from './QuizStyle';
 
-const Quiz = ({ loggedIn }) => {
-  const [completedQuiz, setCompletedQuiz] = useState(false);
+const Quiz = ({ loggedIn, completedQuiz, setCompletedQuiz }) => {
   const [currentQuestion, setCurrentQuestion] = useState({
     id: 0,
     title: null,
@@ -65,14 +64,19 @@ const Quiz = ({ loggedIn }) => {
     }
   };
 
+  const retakeQuiz = () => {
+    // Reset state
+    setCompletedQuiz(false);
+  };
+
   const renderHeader = () => {
     let headerTitle = 'We suggest';
 
-    if (loggedIn && !completedQuiz) {
+    if (!completedQuiz) {
       headerTitle = currentQuestion.title;
     }
 
-    if (!loggedIn) {
+    if (!loggedIn && completedQuiz) {
       headerTitle = 'Log into Spotify to view playlist suggestions!';
     }
 
@@ -102,9 +106,9 @@ const Quiz = ({ loggedIn }) => {
   };
 
   const renderPlaylist = () => {
-    if (completedQuiz) {
-      return <Playlist loggedIn={loggedIn} choices={choices} />;
-    }
+    return (
+      <Playlist loggedIn={loggedIn} choices={choices} retakeQuiz={retakeQuiz} />
+    );
   };
 
   return (

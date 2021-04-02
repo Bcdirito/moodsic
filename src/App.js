@@ -1,16 +1,13 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Quiz from './components/quiz/Quiz.js';
-import './App.scss';
+import { GlobalStyle, AppStyle } from './AppStyle.js';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [accessToken, setAccessToken] = useState(null);
+  const [completedQuiz, setCompletedQuiz] = useState(false);
 
   useEffect(() => {
-    // return function disconnectPlayer() {
-    //   console.log('Disconnecting player...');
-    //   player.disconnect();
-    // };
     if (window.location.pathname.includes('access_token')) {
       let token;
       let path = window.location.pathname.split('/');
@@ -28,6 +25,10 @@ function App() {
   }, []);
 
   useEffect(() => {
+    // return function disconnectPlayer() {
+    //   console.log('Disconnecting player...');
+    //   player.disconnect();
+    // };
     if (window.Spotify) {
       setLoggedIn(true);
     } else {
@@ -52,6 +53,7 @@ function App() {
                 'The Web Playback SDK successfully connected to Spotify!'
               );
               setLoggedIn(true);
+              setCompletedQuiz(true);
             }
           });
         }
@@ -59,29 +61,17 @@ function App() {
     }
   }, [accessToken]);
 
-  useEffect(() => {
-    if (loggedIn) {
-      if (window.location.pathname.includes('access_token')) {
-        let token;
-        let path = window.location.pathname.split('/');
-        path = path[1].split('&');
-
-        // Get access token value from path name
-        for (const key of path) {
-          if (key.includes('access_token')) {
-            token = key.split('=')[1];
-          }
-        }
-
-        setAccessToken(token);
-      }
-    }
-  }, [loggedIn]);
-
   return (
-    <div className='App'>
-      <Quiz loggedIn={loggedIn} />
-    </div>
+    <React.Fragment>
+      <GlobalStyle />
+      <AppStyle className='App'>
+        <Quiz
+          loggedIn={loggedIn}
+          completedQuiz={completedQuiz}
+          setCompletedQuiz={setCompletedQuiz}
+        />
+      </AppStyle>
+    </React.Fragment>
   );
 }
 
