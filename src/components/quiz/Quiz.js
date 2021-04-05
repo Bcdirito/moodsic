@@ -65,8 +65,11 @@ const Quiz = ({ loggedIn, completedQuiz, setCompletedQuiz }) => {
   };
 
   const retakeQuiz = () => {
+    const questionData = getAQuestion(0);
+
     // Reset state
     setCompletedQuiz(false);
+    setCurrentQuestion(questionData);
   };
 
   const renderHeader = () => {
