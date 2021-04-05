@@ -5,6 +5,9 @@ import playlistData from '../../db/playlistData.js';
 const Playlist = ({ loggedIn, choices, retakeQuiz }) => {
   const [playlistID, setPlaylistID] = useState(null);
   const [playlistKey, setPlaylistKey] = useState(null);
+  let maxKey;
+  let otherMaxKey;
+  let max = 0;
 
   useEffect(() => {
     suggestSpotifyPlaylist();
@@ -20,10 +23,32 @@ const Playlist = ({ loggedIn, choices, retakeQuiz }) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
+  const isTied = () => {
+    let isTied = false;
+
+    if (maxKey && max > 1) {
+      // Check for possible tie in `choices`
+      if (choices[maxKey] !== undefined) {
+        for (const key in choices) {
+          if (key !== maxKey && choices[maxKey] === choices[key]) {
+            otherMaxKey = key;
+            isTied = true;
+            break;
+          }
+        }
+      }
+    }
+
+    return isTied;
+  };
+
+  // Return one of two tied playlists
+  const getRandomKey = () => {
+    return Math.random() < 0.5 ? maxKey : otherMaxKey;
+  };
+
   const suggestSpotifyPlaylist = () => {
     const allChoices = Object.keys(choices);
-    let maxKey;
-    let max = 0;
     let choice;
 
     for (const key in choices) {
@@ -33,9 +58,18 @@ const Playlist = ({ loggedIn, choices, retakeQuiz }) => {
       }
     }
 
-    // If there is a tie, return random playlist
+    // If there is a tie between 2 playlists, return 1 of 2 random playlists
+    // If all gets a single vote, return random playlist
     // Otherwise, return suggested playlist
-    if (max === 1) {
+    if (isTied()) {
+      console.log('Tie', maxKey, otherMaxKey);
+      const randomKey = getRandomKey();
+
+      if (randomKey) {
+        setPlaylistID(playlistData[randomKey]['id']);
+      }
+    } else if (max === 1) {
+      console.log('Max is 1');
       choice = allChoices[getRandomInt()];
 
       if (playlistData[choice]) {
