@@ -5,9 +5,6 @@ export const QuestionStyle = styled.div`
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
 
   & > * {
     color: #0f7eea;
