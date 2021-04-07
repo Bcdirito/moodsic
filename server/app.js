@@ -4,8 +4,8 @@ const request = require("request")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
 
-const port = process.env.PORT || 8000
 const app = express()
+let port
 
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
@@ -15,9 +15,19 @@ app.use(express.static(__dirname + '../public'))
     .use(cookieParser())
     .use(express.static(path.join(__dirname, '../build')));
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, '../public', 'index.html'));
-})
+if (process.env.NODE_ENV === 'production') {
+    port = process.env.PORT || 3000;
+
+    app.get('/', (req, res) => {
+      res.sendFile(path.join(__dirname, '../build', 'index.html'));
+    });
+} else {
+    port = 8000;
+
+    app.get('/', (req, res) => {
+      res.sendFile(path.join(__dirname, '../public', 'index.html'));
+    });
+}
 
 app.options('*', cors());
 
